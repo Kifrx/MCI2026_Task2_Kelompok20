@@ -124,9 +124,9 @@ docker-compose up -d
 2. Temukan DAG wikipedia_realtime_stream, geser sakelar untuk mengaktifkan
 3. Klik ▶️ Trigger DAG untuk memaksanya jalan sekarang
 
-![alt text](image.png)
+![alt text](/Assets/image.png)
 Gambar di atas menunjukkan bahwa task-task sukses dijalankan,
 
-![alt text](<Screenshot 2026-05-18 030959.png>)
+![alt text](/Assets/Screenshot%202026-05-18%20030959.png)
 
 Gambar diatas menampikan tab Graph, dimana dua kotak di atas saling terhubung dengan garis biru yang merupakan representasi visual dari logika urutan code. Kotak kiri adalah tugas menyedot data (fetch_orders_data) dan kotak kanan adalah tugas mengolah data dengan Spark (process_to_clickhouse). Di dalam kedua kotak tersebut terdapat indikator kotak kecil berwarna hijau bertuliskan success. Ini membuktikan bahwa dependency (ketergantungan) dibuat berjalan lancar: Tugas 1 berhasil mencari data, lalu estafet diserahkan ke Tugas 2, dan Tugas 2 berhasil mengolah serta memasukkannya ke ClickHouse.
