@@ -5,7 +5,7 @@
 > 1. _Bima Novrifa Ananditya (5025241194)_
 > 2. _Syah Amin Zikri (5025241197)_
 
-Proyek ini mengekstrak data transaksi dari **E-Commerce API**, menemukan pola asosiasi produk menggunakan algoritma FP-Growth di PySpark MLlib, mengorkestrasinya via **Apache Airflow**, menyimpannya ke **ClickHouse**, dan memvisualisasikannya di **Metabase**, dimana semuanya dikemas dalam satu lingkungan Docker.
+Proyek ini mengekstrak data transaksi dari **http://96.9.212.102:8000/orders**, menemukan pola asosiasi produk menggunakan algoritma FP-Growth di PySpark MLlib, mengorkestrasinya via **Apache Airflow**, menyimpannya ke **ClickHouse**, dan memvisualisasikannya di **Metabase**, dimana semuanya dikemas dalam satu lingkungan Docker.
 
 Arsitektur sistem ini mengadopsi pendekatan _Snapshot / Full Refresh_ untuk memastikan seluruh metrik analitik dan _dashboard_ selalu merepresentasikan kondisi data pesanan yang paling mutakhir.
 
@@ -70,3 +70,63 @@ orders-pipeline/
 └── README.md           # Dokumentasi project
 
 ```
+
+## 🚀 Tutorial Penggunaan
+
+Ikuti langkah-langkah di bawah ini untuk mengkloning repositori, menyiapkan lingkungan Docker, hingga menjalankan seluruh _pipeline_.
+
+### 📋 Prasyarat (Prerequisites)
+
+Pastikan perangkat lu sudah terinstal aplikasi berikut:
+
+- [Git](https://git-scm.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+---
+
+### Langkah-Langkah Eksekusi
+
+#### 1. Kloning Repositori
+
+Buka terminal di VS Code, lalu jalankan perintah berikut:
+
+```bash
+git clone https://github.com/Kifrx/MCI2026_Task2_Kelompok20.git
+
+cd orders-pipeline
+```
+
+#### 2. Jalankan Docker
+
+Build image, sebelum itu buka dahulu docker desktop.
+
+```
+docker-compose build
+```
+
+Instalasi database airflow
+
+```
+docker-compose up airflow-init
+```
+
+Jalankan seluruh pipeline
+
+```
+docker-compose up -d
+```
+
+> Tunggu 1–2 menit lalu buka http://localhost:8080
+
+#### 3. Aktifkan Pipeline di Airflow
+
+1. Buka http://localhost:8080 → login admin / admin
+2. Temukan DAG wikipedia_realtime_stream, geser sakelar untuk mengaktifkan
+3. Klik ▶️ Trigger DAG untuk memaksanya jalan sekarang
+
+![alt text](image.png)
+Gambar di atas menunjukkan bahwa task-task sukses dijalankan,
+
+![alt text](<Screenshot 2026-05-18 030959.png>)
+
+Gambar diatas menampikan tab Graph, dimana dua kotak di atas saling terhubung dengan garis biru yang merupakan representasi visual dari logika urutan code. Kotak kiri adalah tugas menyedot data (fetch_orders_data) dan kotak kanan adalah tugas mengolah data dengan Spark (process_to_clickhouse). Di dalam kedua kotak tersebut terdapat indikator kotak kecil berwarna hijau bertuliskan success. Ini membuktikan bahwa dependency (ketergantungan) dibuat berjalan lancar: Tugas 1 berhasil mencari data, lalu estafet diserahkan ke Tugas 2, dan Tugas 2 berhasil mengolah serta memasukkannya ke ClickHouse.
