@@ -1,3 +1,43 @@
+# 🛒 Building Market Basket Analysis Pipeline
+
+> **Authors: MCI_Kelompok_20**
+>
+> 1. _Bima Novrifa Ananditya (5025241194)_
+> 2. _Syah Amin Zikri (5025241197)_
+
+Proyek ini mengekstrak data transaksi dari **E-Commerce API**, menemukan pola asosiasi produk menggunakan algoritma FP-Growth di PySpark MLlib, mengorkestrasinya via **Apache Airflow**, menyimpannya ke **ClickHouse**, dan memvisualisasikannya di **Metabase**, dimana semuanya dikemas dalam satu lingkungan Docker.
+
+Arsitektur sistem ini mengadopsi pendekatan _Snapshot / Full Refresh_ untuk memastikan seluruh metrik analitik dan _dashboard_ selalu merepresentasikan kondisi data pesanan yang paling mutakhir.
+
+---
+
+## 🏗️ Arsitektur Sistem
+
+```text
+E-commerce API
+   ↓ (100 pesanan terbaru / snapshot)
+[Ingestion — Python requests]
+   ↓ simpan latest_orders.parquet
+[Data Lake — folder lokal]
+   ↓ baca, flattening, & FP-Growth ML
+[Processing — Apache Spark MLlib]
+   ↓ truncate-insert (Full Refresh)
+[Data Warehouse — ClickHouse]
+   ↓ koneksi langsung
+[Dashboard — Metabase]
+
+↻ Seluruh siklus diatur oleh Apache Airflow
+```
+
+**Metrik yang dianalisis:**
+
+- **Peak Order Times:** jam-jam tersibuk pelanggan melakukan checkout pesanan
+- **Weekday vs Weekend Behavior:** perbandingan volume transaksi di hari kerja versus akhir pekan
+- **Top Departments:** kategori departemen yang menyumbang volume penjualan terbesar
+- **Most Reordered Products:** produk dengan tingkat repeat order paling tinggi
+- **Customer Reorder Behavior:** seberapa lama jarak rata-rata hari pelanggan kembali berbelanja
+- **Market Basket Analysis:** korelasi dan probabilitas antar produk yang sering dibeli secara bersamaan (berdasarkan nilai Lift & Confidence)
+
 ## 🛠️ Tech Stack
 
 | Komponen       | Teknologi                         |
