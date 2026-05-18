@@ -542,7 +542,7 @@ File ini adalah inti dari Apache Airflow DAG (Directed Acyclic Graph) yang bertu
 
 ## **Membuat Visualisasi & Questions di Metabase**
 
-1. Q1 — Peak Order Times
+#### 1. Q1 — Peak Order Times
 
 - Visualisasi : Bar Chart
   
@@ -575,7 +575,7 @@ Bar Chart menampilkan jam pada sumbu X dan jumlah transaksi unik pada sumbu Y. S
 Visualisasi ini digunakan untuk melihat kapan pelanggan paling aktif melakukan pemesanan. Apabila terdapat batang yang jauh lebih tinggi pada jam tertentu, hal tersebut menunjukkan bahwa transaksi tidak tersebar merata sepanjang hari, tetapi terkonsentrasi pada periode waktu tertentu. Jam dengan order tertinggi dapat dipandang sebagai waktu puncak aktivitas belanja pelanggan.
 
 
-2. Q2 - Weekday vs Weekend Behavior
+#### 2. Q2 - Weekday vs Weekend Behavior
 
 - Visualisasi : Pie Chart
   
@@ -608,7 +608,7 @@ Pie Chart atau Donut Chart menampilkan proporsi transaksi antara hari kerja dan 
 - Insight:
 Visualisasi ini memperlihatkan apakah aktivitas belanja lebih dominan terjadi pada hari kerja atau akhir pekan. Jika proporsi Weekday lebih besar, berarti perilaku transaksi dalam snapshot lebih banyak terjadi pada hari kerja. Sebaliknya, jika Weekend lebih tinggi, maka akhir pekan menjadi periode dengan aktivitas transaksi yang lebih kuat.
 
-3. Q3 — Top Departments
+#### 3. Q3 — Top Departments
 
 - Visualisasi : Row Chart
   
@@ -643,7 +643,7 @@ Horizontal Bar Chart menempatkan nama departemen pada sumbu vertikal dan jumlah 
 - Insight:
 Visualisasi ini mengungkap kategori produk yang paling besar kontribusinya terhadap total volume item dalam transaksi. Departemen dengan batang paling panjang merupakan kategori yang paling sering muncul dalam keranjang belanja pelanggan. Jika beberapa departemen memiliki selisih yang cukup besar dibandingkan kategori lain, berarti permintaan produk terkonsentrasi pada kelompok tertentu.
 
-4. Q4 — Most Reordered Products
+#### 4. Q4 — Most Reordered Products
 
 - Visualisasi : Bar Chart
   
@@ -679,7 +679,7 @@ Bar Chart menampilkan daftar produk pada sumbu X dan total reorder pada sumbu Y.
 - Insight:
 Visualisasi ini memberi gambaran tentang produk yang paling sering dibeli kembali oleh pelanggan. Produk dengan nilai total_reordered tinggi menunjukkan tingkat repeat purchase yang kuat. Jika produk-produk teratas berasal dari kebutuhan harian atau barang rutin, hal tersebut menandakan adanya pola konsumsi berulang.
 
-5. Q5 — Customer Reorder Behavior
+#### 5. Q5 — Customer Reorder Behavior
    
 - Visualisasi : Line Chart
   
@@ -714,7 +714,7 @@ Line Chart menampilkan days_since_prior_order pada sumbu X dan jumlah order unik
 - Insight:
 Visualisasi ini membantu membaca pola interval pelanggan dalam melakukan pembelian ulang. Puncak grafik pada nilai hari tertentu menunjukkan jarak waktu reorder yang paling sering terjadi. Apabila grafik terkonsentrasi pada interval pendek, pelanggan cenderung kembali berbelanja relatif cepat. Sebaliknya, jika puncak berada pada interval lebih panjang, maka siklus pembelian ulang pelanggan cenderung lebih renggang.
 
-6. Q6 — Basket Analysis FP-Growth Rules
+#### 6. Q6 — Basket Analysis FP-Growth Rules
    
 - Visualisasi : Table View
   
