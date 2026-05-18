@@ -2,8 +2,8 @@
 
 > **Authors: MCI_Kelompok_20**
 >
-> 1. _Bima Novrifa Ananditya (5025241194)_
-> 2. _Syah Amin Zikri (5025241197)_
+> 1. _Bima Novrifa Ananditya (5025241194)_ -> Pengerjaan 3. Membuat Visualisasi & Questions di Metabase & 4. Membangun Dashboard di Metabase
+> 2. _Syah Amin Zikri (5025241197)_ -> Pengerjaan 1. Merancang Apache Airflow DAG & 2. Mengelola Data di ClickHouse
 
 Proyek ini mengekstrak data transaksi dari **http://96.9.212.102:8000/orders**, menemukan pola asosiasi produk menggunakan algoritma FP-Growth di PySpark MLlib, mengorkestrasinya via **Apache Airflow**, menyimpannya ke **ClickHouse**, dan memvisualisasikannya di **Metabase**, dimana semuanya dikemas dalam satu lingkungan Docker.
 
