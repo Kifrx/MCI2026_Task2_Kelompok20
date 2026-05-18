@@ -540,7 +540,7 @@ File ini adalah inti dari Apache Airflow DAG (Directed Acyclic Graph) yang bertu
 
 ---
 
-## Membuat Visualisasi & Questions di Metabase
+## **Membuat Visualisasi & Questions di Metabase**
 
 1. Q1 — Peak Order Times
 
@@ -571,4 +571,200 @@ Bar Chart menampilkan jam pada sumbu X dan jumlah transaksi unik pada sumbu Y. S
 2. Jam dengan batang rendah menunjukkan aktivitas transaksi yang lebih sepi.
 3. Visualisasi ini membantu mengidentifikasi pola waktu belanja pelanggan, misalnya apakah transaksi lebih sering terjadi pada pagi, siang, atau malam hari.
 
+- Insight:
+Visualisasi ini digunakan untuk melihat kapan pelanggan paling aktif melakukan pemesanan. Apabila terdapat batang yang jauh lebih tinggi pada jam tertentu, hal tersebut menunjukkan bahwa transaksi tidak tersebar merata sepanjang hari, tetapi terkonsentrasi pada periode waktu tertentu. Jam dengan order tertinggi dapat dipandang sebagai waktu puncak aktivitas belanja pelanggan.
+
+
+2. Q2 - Weekday vs Weekend Behavior
+
+- Visualisasi : Pie Chart
+  
+<img width="2016" height="622" alt="Screenshot 2026-05-18 184930" src="https://github.com/user-attachments/assets/5462f433-ac6d-4f01-8e29-dbbc7150d2b6" />
+
+
+- Query :
+```
+SELECT
+    if(order_dow < 2, 'Weekend', 'Weekday') AS day_type,
+    uniqExact(order_id) AS total_unique_orders
+FROM analytics.order_items
+GROUP BY day_type
+ORDER BY total_unique_orders DESC;
+
+```
+
+
+- Penjelasan Question:
+Question ini digunakan untuk membandingkan jumlah transaksi unik antara kategori Weekend dan Weekday. Kolom day_type dibentuk langsung melalui fungsi if() di SQL. Berdasarkan ketentuan tugas, order_dow bernilai 0 dan 1 dikelompokkan sebagai weekend, sedangkan nilai lainnya dikelompokkan sebagai weekday. Selanjutnya, jumlah order unik dihitung dengan uniqExact(order_id). Struktur kolom order_dow tersedia pada tabel order_items.
+
+- Penjelasan visualisasi:
+Pie Chart atau Donut Chart menampilkan proporsi transaksi antara hari kerja dan akhir pekan. Setiap bagian lingkaran merepresentasikan persentase total order dari masing-masing kategori hari.
+
+- Cara membaca hasil:
+1. Jika porsi Weekday lebih besar, berarti transaksi lebih banyak terjadi pada hari kerja.
+2. Jika porsi Weekend lebih besar, berarti pelanggan lebih aktif berbelanja pada akhir pekan.
+3. Selisih proporsi menunjukkan seberapa kuat perbedaan perilaku order berdasarkan tipe hari.
+
+- Insight:
+Visualisasi ini memperlihatkan apakah aktivitas belanja lebih dominan terjadi pada hari kerja atau akhir pekan. Jika proporsi Weekday lebih besar, berarti perilaku transaksi dalam snapshot lebih banyak terjadi pada hari kerja. Sebaliknya, jika Weekend lebih tinggi, maka akhir pekan menjadi periode dengan aktivitas transaksi yang lebih kuat.
+
+3. Q3 — Top Departments
+
+- Visualisasi : Row Chart
+  
+<img width="2008" height="615" alt="Screenshot 2026-05-18 184941" src="https://github.com/user-attachments/assets/1b7ffc83-d8a8-40ca-ab88-40f5f698584a" />
+
+
+
+- Query :
+```
+SELECT
+    department,
+    count() AS total_items_sold
+FROM analytics.order_items
+GROUP BY department
+ORDER BY total_items_sold DESC
+LIMIT 15;
+
+```
+
+
+- Penjelasan Question:
+Question ini digunakan untuk mengetahui departemen produk dengan jumlah item terjual terbanyak. Berbeda dari metrik sebelumnya, query ini menggunakan count() karena yang dihitung bukan jumlah transaksi unik, melainkan total kemunculan produk dalam data transaksi. Tabel order_items sudah berbentuk data hasil flattening, sehingga satu baris merepresentasikan satu item produk di dalam order.
+
+- Penjelasan visualisasi:
+Horizontal Bar Chart menempatkan nama departemen pada sumbu vertikal dan jumlah item terjual pada sumbu horizontal. Departemen dengan volume tertinggi akan memiliki batang paling panjang.
+
+- Cara membaca hasil:
+1. Departemen di posisi teratas adalah kategori dengan penjualan item terbesar.
+2. Panjang batang menunjukkan besarnya kontribusi volume item tiap departemen.
+3. Visualisasi ini memungkinkan perbandingan kategori produk secara cepat.
+
+- Insight:
+Visualisasi ini mengungkap kategori produk yang paling besar kontribusinya terhadap total volume item dalam transaksi. Departemen dengan batang paling panjang merupakan kategori yang paling sering muncul dalam keranjang belanja pelanggan. Jika beberapa departemen memiliki selisih yang cukup besar dibandingkan kategori lain, berarti permintaan produk terkonsentrasi pada kelompok tertentu.
+
+4. Q4 — Most Reordered Products
+
+- Visualisasi : Bar Chart
+  
+<img width="2013" height="614" alt="Screenshot 2026-05-18 184951" src="https://github.com/user-attachments/assets/ef31bee1-f0e2-44ec-8c97-a86316d6172f" />
+
+
+
+- Query :
+```
+SELECT
+    product_name,
+    sum(reordered) AS total_reorders
+FROM analytics.order_items
+GROUP BY product_name
+HAVING total_reorders > 0
+ORDER BY total_reorders DESC
+LIMIT 15;
+
+```
+
+
+- Penjelasan Question:
+Question ini digunakan untuk mengidentifikasi produk yang paling sering dibeli ulang. Kolom reordered pada tabel order_items bertipe numerik dan digunakan untuk menandai pembelian ulang. Dengan menjumlahkan nilai reordered untuk setiap product_name, diperoleh total frekuensi reorder per produk. Hasil kemudian diurutkan dari yang terbesar dan dibatasi pada 15 produk teratas.
+
+- Penjelasan visualisasi:
+Bar Chart menampilkan daftar produk pada sumbu X dan total reorder pada sumbu Y. Produk dengan batang tertinggi adalah produk yang paling sering muncul sebagai pembelian ulang.
+
+- Cara membaca hasil:
+1. Produk teratas merupakan produk dengan loyalitas pembelian tertinggi.
+2. Produk dengan nilai reorder tinggi cenderung sering dibeli kembali oleh pelanggan.
+3. Perbandingan batang menunjukkan tingkat repeat purchase antarproduk.
+
+- Insight:
+Visualisasi ini memberi gambaran tentang produk yang paling sering dibeli kembali oleh pelanggan. Produk dengan nilai total_reordered tinggi menunjukkan tingkat repeat purchase yang kuat. Jika produk-produk teratas berasal dari kebutuhan harian atau barang rutin, hal tersebut menandakan adanya pola konsumsi berulang.
+
+5. Q5 — Customer Reorder Behavior
    
+- Visualisasi : Line Chart
+  
+<img width="2013" height="597" alt="Screenshot 2026-05-18 185004" src="https://github.com/user-attachments/assets/813d6e28-6c0e-43f2-b423-c1a04fc4150a" />
+
+
+
+
+- Query :
+```
+SELECT
+    days_since_prior_order,
+    uniqExact(order_id) AS total_unique_orders
+FROM analytics.order_items
+GROUP BY days_since_prior_order
+ORDER BY days_since_prior_order ASC;
+
+```
+
+
+- Penjelasan Question:
+Question ini bertujuan untuk mengetahui pola jeda waktu pelanggan dalam melakukan pemesanan kembali. Query menghitung jumlah order unik berdasarkan nilai days_since_prior_order, yaitu selisih hari antara order saat ini dan order sebelumnya. Kolom tersebut memang tersedia pada tabel order_items dalam pipeline proyek.
+
+- Penjelasan visualisasi:
+Line Chart menampilkan days_since_prior_order pada sumbu X dan jumlah order unik pada sumbu Y. Titik-titik pada grafik memperlihatkan banyaknya transaksi yang terjadi setelah jeda waktu tertentu sejak pembelian sebelumnya.
+
+- Cara membaca hasil:
+1. Puncak grafik menunjukkan interval hari yang paling umum sebelum pelanggan berbelanja lagi.
+2. Jika banyak order terkonsentrasi pada selang hari tertentu, maka terdapat pola reorder yang dominan.
+3. Penurunan atau kenaikan grafik menunjukkan perubahan frekuensi order berdasarkan jarak hari belanja ulang.
+
+- Insight:
+Visualisasi ini membantu membaca pola interval pelanggan dalam melakukan pembelian ulang. Puncak grafik pada nilai hari tertentu menunjukkan jarak waktu reorder yang paling sering terjadi. Apabila grafik terkonsentrasi pada interval pendek, pelanggan cenderung kembali berbelanja relatif cepat. Sebaliknya, jika puncak berada pada interval lebih panjang, maka siklus pembelian ulang pelanggan cenderung lebih renggang.
+
+6. Q6 — Basket Analysis FP-Growth Rules
+   
+- Visualisasi : Table View
+  
+<img width="1095" height="626" alt="Screenshot 2026-05-18 185041" src="https://github.com/user-attachments/assets/3cc794a1-e08d-4660-ad07-12c7622f0052" />
+
+
+
+
+
+- Query :
+```
+SELECT
+    antecedent,
+    consequent,
+    confidence,
+    lift
+FROM analytics.fp_growth_rules
+ORDER BY lift DESC, confidence DESC;
+
+```
+
+
+- Penjelasan Question:
+Question ini digunakan untuk menampilkan hasil analisis pola asosiasi produk dari metode FP-Growth. Tabel fp_growth_rules menyimpan kolom antecedent, consequent, confidence, lift, dan support. Dalam tampilan akhir, kolom yang ditonjolkan adalah pasangan produk awal dan produk terkait, bersama nilai confidence dan lift. Hasil diurutkan berdasarkan lift terbesar agar rule dengan kekuatan asosiasi paling tinggi muncul di posisi teratas.
+
+- Penjelasan visualisasi:
+Table View digunakan karena hasil association rule tidak paling tepat disajikan sebagai grafik sederhana. Setiap baris tabel mewakili satu aturan asosiasi:
+1. antecedent: produk atau kelompok produk pemicu.
+2. consequent: produk yang cenderung muncul bersamaan.
+2. confidence: tingkat kemungkinan consequent muncul ketika antecedent muncul.
+3. lift: kekuatan asosiasi dibandingkan kondisi acak.
+
+- Cara membaca hasil:
+1. Rule dengan confidence tinggi menunjukkan hubungan yang sering terjadi.
+2. Rule dengan lift tinggi menunjukkan asosiasi yang relatif kuat dibandingkan kebetulan biasa.
+3. Baris teratas tabel merupakan pola kombinasi produk yang paling menarik untuk dianalisis lebih lanjut.
+
+- Insight:
+Tabel ini menunjukkan pola keterkaitan antarproduk yang sering muncul dalam keranjang belanja yang sama. Rule dengan nilai confidence tinggi menunjukkan bahwa consequent cukup sering muncul ketika antecedent muncul. Rule dengan lift tinggi menunjukkan bahwa hubungan antarproduk tersebut lebih kuat dibandingkan kemungkinan kemunculan acak. Dengan demikian, tabel ini tidak hanya menunjukkan produk yang sering dibeli bersama, tetapi juga kekuatan asosiasinya.
+
+
+---
+
+## **Membangun Dashboard di Metabase**
+
+<img width="1393" height="1220" alt="Screenshot 2026-05-18 191122" src="https://github.com/user-attachments/assets/26148d73-b8e7-4313-9e71-0e16589f7248" />
+
+<img width="1369" height="891" alt="Screenshot 2026-05-18 191127" src="https://github.com/user-attachments/assets/738372ac-8589-4983-b77a-54c23f5d0dd5" />
+
+Secara keseluruhan, dashboard ini menyajikan hasil analisis transaksi secara terstruktur melalui tiga section utama yang saling berkaitan. Section Ordering Behavior memberikan gambaran mengenai pola waktu belanja pelanggan, yaitu kapan transaksi paling ramai terjadi dan apakah aktivitas pemesanan lebih dominan pada weekday atau weekend. Section Product Insights memperlihatkan kategori produk dengan volume penjualan terbesar serta produk yang paling sering dibeli ulang, sehingga membantu mengidentifikasi kelompok produk yang paling dominan dan memiliki kecenderungan repeat purchase tinggi. Selanjutnya, section Advanced Analytics memperdalam analisis melalui pola jarak waktu pelanggan melakukan reorder dan hasil association rule FP-Growth yang menunjukkan hubungan pembelian antarproduk berdasarkan nilai confidence dan lift. Dengan pembagian tersebut, dashboard tidak hanya menampilkan ringkasan data transaksi, tetapi juga membentuk alur analisis yang utuh, mulai dari pola perilaku pelanggan, performa produk, hingga potensi strategi bisnis seperti pengelolaan stok, promosi berbasis waktu, rekomendasi produk, cross-selling, dan bundling.
+
+
+
