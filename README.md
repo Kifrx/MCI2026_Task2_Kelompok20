@@ -537,3 +537,7 @@ File ini adalah inti dari Apache Airflow DAG (Directed Acyclic Graph) yang bertu
   - process_spark: Menjalankan script `process_orders_spark.py`.
 
 - `ingest_api >> process_spark`: Ini memastikan bahwa tugas memproses data ke **Spark/ClickHouse** hanya akan berjalan jika tugas penarikan data dari API berhasil diselesaikan lebih dulu.
+
+---
+
+## Membuat Visualisasi & Questions di Metabase
