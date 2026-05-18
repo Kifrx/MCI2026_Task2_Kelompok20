@@ -546,5 +546,22 @@ File ini adalah inti dari Apache Airflow DAG (Directed Acyclic Graph) yang bertu
 
 <img width="2004" height="614" alt="Screenshot 2026-05-18 184918" src="https://github.com/user-attachments/assets/e8cbbab5-00b2-4cd6-8933-7a8033c6b746" />
 
+- Query :
+```
+SELECT
+    order_hour_of_day AS hour_of_day,
+    uniqExact(order_id) AS total_unique_orders
+FROM analytics.order_items
+GROUP BY order_hour_of_day
+ORDER BY order_hour_of_day ASC;
+
+```
+- Visualisasi : Bar Chart
+
+- Penjelasan Question:
+Question ini digunakan untuk menganalisis jam terjadinya transaksi paling banyak dalam satu hari. Query menghitung jumlah transaksi unik berdasarkan order_id yang dikelompokkan menurut order_hour_of_day. Fungsi uniqExact(order_id) digunakan karena yang ingin diketahui adalah jumlah order yang berbeda, bukan jumlah baris produk pada setiap transaksi. Dalam ClickHouse, uniqExact() menghasilkan perhitungan jumlah nilai unik secara eksak.
+
+- Penjelasan visualisasi:
+Bar Chart menampilkan jam pada sumbu X dan jumlah transaksi unik pada sumbu Y. Setiap batang menunjukkan total order yang terjadi pada jam tertentu. Semakin tinggi batang, semakin banyak transaksi yang terjadi pada jam tersebut.
 
    
