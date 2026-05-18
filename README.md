@@ -541,3 +541,10 @@ File ini adalah inti dari Apache Airflow DAG (Directed Acyclic Graph) yang bertu
 ---
 
 ## Membuat Visualisasi & Questions di Metabase
+
+1. Q1 — Peak Order Times
+
+<img width="2004" height="614" alt="Screenshot 2026-05-18 184918" src="https://github.com/user-attachments/assets/e8cbbab5-00b2-4cd6-8933-7a8033c6b746" />
+
+
+   
