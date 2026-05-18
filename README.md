@@ -139,7 +139,7 @@ Dari gambar, dapt dilihat pesan yang dicetak: "Load data orders..." dan terdapat
 
 ### Analisis DAGs
 
-#### 1. Task `fetch_orders_py`
+#### 1. Task `fetch_orders.py`
 
 ```
 import requests
