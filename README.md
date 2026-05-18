@@ -390,7 +390,7 @@ Tahap ini mengimplementasikan algoritma FP-Growth dari library **PySpark MLlib**
 
   - `minSupport=0.02:` Artinya, sebuah kombinasi produk hanya akan dianggap sebagai pola yang relevan jika muncul (dibeli secara bersamaan) di minimal 2% dari total keseluruhan transaksi.
 
-  - `minConfidence=0.1: Artinya`, menetapkan probabilitas bersyarat minimum sebesar 10%. Jika pelanggan membeli barang A, harus ada kemungkinan minimal 10% bahwa mereka juga akan membeli barang B.
+  - `minConfidence=0.1:` Artinya, menetapkan probabilitas bersyarat minimum sebesar 10%. Jika pelanggan membeli barang A, harus ada kemungkinan minimal 10% bahwa mereka juga akan membeli barang B.
 
 - `model = fpGrowth.fit(df_basket):` Melatih **fitting** model asosiasi menggunakan dataset keranjang belanja yang sudah disiapkan.
 
