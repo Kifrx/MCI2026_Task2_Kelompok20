@@ -1,3 +1,27 @@
+CREATE DATABASE IF NOT EXISTS analytics;
+
+CREATE TABLE IF NOT EXISTS analytics.order_items (
+    order_id Int32,
+    user_id Int32,
+    order_number Int32,
+    order_dow Int32,
+    order_hour_of_day Int32,
+    days_since_prior_order Float32,
+    product_id Int32,
+    product_name String,
+    department String,
+    reordered Int32
+) ENGINE = MergeTree()
+ORDER BY (order_dow, order_hour_of_day, order_id);
+
+CREATE TABLE IF NOT EXISTS analytics.fp_growth_rules (
+    antecedent String,
+    consequent String,
+    confidence Float32,
+    lift Float32,
+    support Float32
+) ENGINE = MergeTree()
+ORDER BY (confidence, lift);
 
 -- Q1 - Peak Order Times
 
